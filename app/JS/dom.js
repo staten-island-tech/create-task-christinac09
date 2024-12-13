@@ -1,14 +1,12 @@
 const DOMSelectors = {
-  container: document.getElementById("cards-container"),
-  moreContainer: document.querySelector("#more-container"),
-  gameContainer: document.querySelector("#game-container"),
-  gameStartBtn: document.querySelector("#game-start-btn"),
+  homeContainer: document.getElementById("home-container"),
+  battleContainer: document.getElementById("battle-container"),
+  pullContainer: document.getElementById("pull-container"),
+  statsContainer: document.getElementById("stats-container"),
 };
 
 function clearContainers() {
-  DOMSelectors.container.innerHTML = "";
-  DOMSelectors.moreContainer.innerHTML = "";
-  DOMSelectors.gameContainer.innerHTML = "";
+  DOMSelectors.forEach((container) => (container.innerHTML = ""));
 }
 
 export { DOMSelectors, clearContainers };
