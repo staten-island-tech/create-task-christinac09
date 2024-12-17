@@ -59,12 +59,20 @@ function drawCharacters(allData, number) {
   return pulls;
 }
 
-function updateUserCoins(amount, type) {
+function updateUserCoins(type) {
   if (type === "pull") {
-    amount -= 5;
+    userStats.currency -= 5;
+    document.getElementById(
+      "coins"
+    ).innerHTML = `Currency: ${userStats.currency}`;
   }
 }
 
+function officialPull(data, amount) {
+  console.log(drawCharacters(data, amount));
+  updateUserCoins("pull");
+}
+
 document.getElementById("pull-btn").addEventListener("click", function () {
-  console.log(drawCharacters(data, 5));
+  officialPull(data, 5);
 });
