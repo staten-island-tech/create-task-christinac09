@@ -8,6 +8,8 @@ const userStats = {
   health: 0,
 };
 
+const data = await getAllData();
+
 function getRandomCharacters(data, number) {
   // returns only 1 object if number is 1, returns an array of objects if number > 1
   if (number === 1) {
@@ -25,9 +27,6 @@ function getRandomCharacters(data, number) {
   }
 }
 
-const data = await getAllData();
-getRandomCharacters(data, 4);
-
 function getSorted(data, rarity) {
   let sorted = [];
   if (rarity === 4) {
@@ -40,7 +39,7 @@ function getSorted(data, rarity) {
   return sorted;
 }
 
-function drawCharacters(allData, number) {
+function drawWithRates(allData, number) {
   // taking rarity into account --> based on a random number, get either 4 or 5 rarity characters
   const pulls = [];
   for (let i = 0; i < number; i++) {
@@ -69,7 +68,7 @@ function updateUserCoins(type) {
 }
 
 function officialPull(data, amount) {
-  console.log(drawCharacters(data, amount));
+  console.log(drawWithRates(data, amount));
   updateUserCoins("pull");
 }
 
