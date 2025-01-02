@@ -1,5 +1,6 @@
 import "../CSS/style.css";
 import { getAllData } from "./display";
+import { getCharacterSkills } from "./battle";
 
 const userStats = {
   // idk

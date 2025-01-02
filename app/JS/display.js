@@ -28,14 +28,4 @@ async function getCharacterData(character) {
   }
 }
 
-function getRandomCharacters(number, data) {
-  const characters = [];
-  for (let i = 0; i < number; i++) {
-    const randomInteger = Math.floor(Math.random() * data.length);
-    const randomCharacter = data[randomInteger];
-    characters.push(randomCharacter);
-  }
-  return characters;
-}
-
 export { getAllData, getCharacterData };
