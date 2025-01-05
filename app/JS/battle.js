@@ -1,12 +1,26 @@
 /* function attack(offense, defense, attackType) {
-    if (attackType==="")
+    
 }
-
+function officialBattle(player1, player2) {  //each player should be an array of hp, attack value, and stuff
+  while player1.status && player2.status{ // player.status is boolean value: alive is true, dead is fasle
+  
+  } else {
+   if (player1.status<=0) {
+   // game over, player1 victory, player2 defeat
+   // award player1
+   // update html
+}
+   if (player2.status <=0) {
+    // same as condition above but player1 is not awarded
+    }
+}
 function updateHealth(player, type) {
     if (type==="normal damage") {
         player.health -= //smth
+        //update html
     }
-} */
+} 
+*/
 
 async function getCharacterSkills(character) {
   try {
@@ -24,7 +38,7 @@ async function getCharacterSkills(character) {
   }
 }
 
-function getRandomAttackValue(attackType, characterSkills) {
+function getRandomAttackValue(attackType, characterSkills) { // HAVE TO CHANGE HIS BC NOT ALL CHARACTERS HAVE !!!!
   let damageString;
   if (attackType === "normal") {
     damageString = characterSkills[0]["attribute-scaling"][0].value;
@@ -47,7 +61,9 @@ const skills = await getCharacterSkills("albedo");
 document.getElementById("normal").addEventListener("click", function () {
   // define damage variable
   const damage = getRandomAttackValue("normal", skills);
-  // run damage function w damage parameter + update health & commentary stuff
+
+  // run damage function w damage parameter + update health & commentary in html
 });
+
 
 export { getCharacterSkills };
