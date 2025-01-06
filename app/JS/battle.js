@@ -1,3 +1,5 @@
+// SHOULD I MAKE THE CARDS FOR EACH BATTLE RANDOM INSTEAD OF THE PLAYER BEING ABLE TO CHOOSE
+
 /* function attack(offense, defense, attackType) {
     
 }
@@ -18,7 +20,11 @@ function updateHealth(player, type) {
     if (type==="normal damage") {
         player.health -= //smth
         //update html
-    }
+        document.getElementById("health-bar").value = "some integer"
+    } else if (type==="elemental damage") {
+     } else if (type==="burst damage") {
+      } else {
+       alert("check updateHealth inputs")}
 } 
 */
 
@@ -39,7 +45,7 @@ async function getCharacterSkills(character) {
 }
 
 function getRandomAttackValue(attackType, characterSkills) { // HAVE TO CHANGE HIS BC NOT ALL CHARACTERS HAVE !!!!
-  let damageString;
+  /* let damageString;
   if (attackType === "normal") {
     damageString = characterSkills[0]["attribute-scaling"][0].value;
   } else if (attackType === "elemental") {
@@ -53,17 +59,37 @@ function getRandomAttackValue(attackType, characterSkills) { // HAVE TO CHANGE H
   console.log(damageList);
   const randomInt = Math.floor(Math.random() * damageList.length);
   const randomDamage = damageList[randomInt];
-  return randomDamage;
+  return randomDamage; */
+  
 }
 const skills = await getCharacterSkills("albedo");
 /* console.log(getRandomAttackValue("normal", skills)); */
 
-document.getElementById("normal").addEventListener("click", function () {
+/* document.getElementById("normal").addEventListener("click", function () {
   // define damage variable
   const damage = getRandomAttackValue("normal", skills);
 
   // run damage function w damage parameter + update health & commentary in html
-});
+}); 
+document.getElementById("elemental").addEventListening("click", function() {
+const damage = getRandomAttackValue("elemental", skills)})*/
 
+async function test() {
+  try {
+    const response = await fetch(
+      `https://genshin.jmp.blue/characters/all`
+    );
+    if (response.status != 200) {
+      throw new Error(response);
+    } else {
+      const data = await response.json();
+      data.forEach((a)=>console.log(a.name, a.skillTalents[0]["upgrades"][0].value));
+    }
+  } catch (error) {
+    alert("character not found");
+  }
+}
+
+test()
 
 export { getCharacterSkills };

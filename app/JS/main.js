@@ -2,12 +2,17 @@ import "../CSS/style.css";
 import { getAllData } from "./display";
 import { getCharacterSkills } from "./battle";
 
-const userStats = {
+const playerStats = [{
   // idk
+  name: "player1",
   currency: 200,
   cards: [],
   health: 0,
-};
+},{
+  name: "player2",
+  health: 0,
+  cards:[]
+}]
 
 const data = await getAllData();
 
@@ -61,15 +66,17 @@ function drawWithRates(allData, number) {
 
 function updateUserCoins(type) {
   if (type === "pull") {
-    userStats.currency -= 5;
+    playerStats[0].currency -= 5;
     document.getElementById(
       "coins"
-    ).innerHTML = `Currency: ${userStats.currency}`;
+    ).innerHTML = `Currency: ${playerStats[0].currency}`;
   }
 }
 
 function officialPull(data, amount) {
-  console.log(drawWithRates(data, amount));
+  const pulls = drawWithRates(data, amount)
+  console.log(pulls);
+  playerStats[0].cards.push(pulls)
   updateUserCoins("pull");
 }
 
