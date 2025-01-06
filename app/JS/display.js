@@ -1,3 +1,5 @@
+import { DOMSelectors } from "./dom";
+
 async function getAllData() {
   try {
     const response = await fetch(`https://genshin.jmp.blue/characters/all`);
@@ -27,5 +29,13 @@ async function getCharacterData(character) {
     alert("could not find that character");
   }
 }
+
+function displayUserStats(user) {
+  DOMSelectors.statsContainer.insertAdjacentHTML(
+    "beforeend",
+    `<h2>${user.name} 200</h2>
+    <h2 id="coins">Currency: 200</h2>`
+  );
+} //should i make this a modal?
 
 export { getAllData, getCharacterData };

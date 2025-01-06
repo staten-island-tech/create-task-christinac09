@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dim">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -7,9 +7,19 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div class="" id="home-container"></div>
+    <div class="navbar">
+      <div class="btn btn-ghost text-2xl font-bold flex-1">
+        <h1><a href="">Title</a></h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-ghost text-xl" id="game-start-btn">Battle</button>
+        <button class="btn btn-ghost text-xl" id="game-start-btn">Pull</button>
+        <button class="btn btn-ghost text-xl" id="game-start-btn">Stats</button>
+        <a href="https://github.com/staten-island-tech/create-task-christinac09" class="btn btn-ghost text-xl">Github</a>
+      </div>
+    </div>    
     <div class="flex flex-row" id="battle-container">
-      <h2 class="text-center" id="commentary">commentary</h2>
+      <!-- <h2 class="text-center" id="commentary">commentary</h2>
       <div class="w-1/2 h-screen" id="user-side">
         <div id="health-bar"><progress class="progress w-56" value="10" max="100"></progress></div>
         <div id="card"></div>
@@ -19,14 +29,14 @@
           <button class="btn" id="attack-btn" data-id="elemental-burst" disabled>EB</button>
         </div>
       </div>
-      <div class="w-1/2 h-screen bg-black" id="opponent-side"></div>
+      <div class="w-1/2 h-screen bg-black" id="opponent-side"></div> -->
     </div>
     <div class="" id="pull-container">
-      <button class="btn btn-primary" id="pull-btn">click</button>
-
+      <!-- <button class="btn btn-primary" id="pull-btn">click</button> -->
     </div>
-    <div class="" id="stats-container">
-      <h2 id="coins">Currency: 200</h2>
+    <div class="max-w-xl mx-auto p-6 rounded-lg shadow-lg" id="stats-container">
+      <!-- <h2 id="coins">Currency: 200</h2> 
+      -->
     </div>
     <!-- <div class="trivia"></div> -->
     <script type="module" src="/JS/main.js"></script>
