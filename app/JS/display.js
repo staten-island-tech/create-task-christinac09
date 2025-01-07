@@ -34,7 +34,7 @@ function displayUserStats(user) {
   DOMSelectors.statsContainer.insertAdjacentHTML(
     "beforeend",
     `<h2>${user.name} 200</h2>
-    <h2 id="coins">Currency: 200</h2>`
+    <h2 id="coins">Currency: 200</h2>` // add wins,
   );
 } //should i make this a modal?
 

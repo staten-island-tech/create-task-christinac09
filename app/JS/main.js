@@ -2,17 +2,20 @@ import "../CSS/style.css";
 import { getAllData } from "./display";
 import { getCharacterSkills } from "./battle";
 
-const playerStats = [{
-  // idk
-  name: "player1",
-  currency: 200,
-  cards: [],
-  health: 0,
-},{
-  name: "player2",
-  health: 0,
-  cards:[]
-}]
+const playerStats = [
+  {
+    // idk
+    name: "player1",
+    currency: 200,
+    cards: [],
+    health: 0,
+  },
+  {
+    name: "player2",
+    health: 0,
+    cards: [],
+  },
+];
 
 const data = await getAllData();
 
@@ -68,18 +71,33 @@ function updateUserCoins(type) {
   if (type === "pull") {
     playerStats[0].currency -= 5;
     document.getElementById(
-      "coins"
+      "coins-stat"
     ).innerHTML = `Currency: ${playerStats[0].currency}`;
   }
 }
 
 function officialPull(data, amount) {
-  const pulls = drawWithRates(data, amount)
+  const pulls = drawWithRates(data, amount);
   console.log(pulls);
-  playerStats[0].cards.push(pulls)
+  playerStats[0].cards.push(pulls);
   updateUserCoins("pull");
+  return pulls
 }
 
 document.getElementById("pull-btn").addEventListener("click", function () {
-  officialPull(data, 5);
+  const results = officialPull(data, 5);
+  results.forEach((r)=>document.getElementById("pull-results-text"))
+  document.getElementById("pull-results-text").innerHTML = `Results: ${}`
 });
+
+document
+  .getElementById("pull-start-btn")
+  .addEventListener("click", function () {
+    document.getElementById("pull-container").insertAdjacentHTML(
+      "beforeend",
+      `<h2>heading</h2>
+      <button class="btn btn-primary" id="pull-btn">Pull</button>
+      <p id="pull-results-text">Results: </p>
+      <p id="pull-results-text">Results: </p>`
+    );
+  });
