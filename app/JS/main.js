@@ -81,13 +81,15 @@ function officialPull(data, amount) {
   console.log(pulls);
   playerStats[0].cards.push(pulls);
   updateUserCoins("pull");
-  return pulls
+  return pulls;
 }
 
 document.getElementById("pull-btn").addEventListener("click", function () {
   const results = officialPull(data, 5);
-  results.forEach((r)=>document.getElementById("pull-results-text"))
-  document.getElementById("pull-results-text").innerHTML = `Results: ${}`
+  /* results.forEach((r)=>document.getElementById("pull-results-text")) */
+  document.getElementById(
+    "pull-results-text"
+  ).innerHTML = `Results: ${results}`;
 });
 
 document
