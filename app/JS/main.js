@@ -1,6 +1,7 @@
 import "../CSS/style.css";
 import { getAllData } from "./display";
 import { getCharacterSkills } from "./battle";
+import { DOMSelectors } from "./dom";
 
 const playerStats = [
   {
@@ -79,27 +80,46 @@ function updateUserCoins(type) {
 function officialPull(data, amount) {
   const pulls = drawWithRates(data, amount);
   console.log(pulls);
+  // update stats
   playerStats[0].cards.push(pulls);
+  pulls.forEach((card) => {
+    document
+      .getElementById("cards-stat")
+      .insertAdjacentHTML("beforeend", `${card.name}, `);
+  });
+
   updateUserCoins("pull");
   return pulls;
 }
 
-document.getElementById("pull-btn").addEventListener("click", function () {
-  const results = officialPull(data, 5);
-  /* results.forEach((r)=>document.getElementById("pull-results-text")) */
-  document.getElementById(
-    "pull-results-text"
-  ).innerHTML = `Results: ${results}`;
-});
-
-document
-  .getElementById("pull-start-btn")
-  .addEventListener("click", function () {
-    document.getElementById("pull-container").insertAdjacentHTML(
-      "beforeend",
-      `<h2>heading</h2>
+function start() {
+  document
+    .getElementById("pull-start-btn")
+    .addEventListener("click", function () {
+      console.log("clicked");
+      DOMSelectors.pullContainer.insertAdjacentHTML(
+        "beforeend",
+        `<h2>heading</h2>
       <button class="btn btn-primary" id="pull-btn">Pull</button>
       <p id="pull-results-text">Results: </p>
-      <p id="pull-results-text">Results: </p>`
+      <p id="coins-results-text">Coins: </p>`
+      );
+      console.log(document.getElementById("pull-btn"));
+      something();
+    });
+}
+
+function something() {
+  console.log("clicked", document.getElementById("pull-btn"));
+  document.getElementById("pull-btn").addEventListener("click", function () {
+    const results = officialPull(data, 5);
+    //results.forEach((r)=>document.getElementById("pull-results-text"))
+    results.forEach((r) =>
+      document
+        .getElementById("pull-results-text")
+        .insertAdjacentHTML("beforeend", `${r.name} `)
     );
   });
+}
+
+start();

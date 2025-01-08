@@ -44,7 +44,8 @@ async function getCharacterSkills(character) {
   }
 }
 
-function getRandomAttackValue(attackType, characterSkills) { // HAVE TO CHANGE HIS BC NOT ALL CHARACTERS HAVE !!!!
+function getRandomAttackValue(attackType, characterSkills) {
+  // HAVE TO CHANGE HIS BC NOT ALL CHARACTERS HAVE !!!!
   /* let damageString;
   if (attackType === "normal") {
     damageString = characterSkills[0]["attribute-scaling"][0].value;
@@ -60,7 +61,6 @@ function getRandomAttackValue(attackType, characterSkills) { // HAVE TO CHANGE H
   const randomInt = Math.floor(Math.random() * damageList.length);
   const randomDamage = damageList[randomInt];
   return randomDamage; */
-  
 }
 const skills = await getCharacterSkills("albedo");
 /* console.log(getRandomAttackValue("normal", skills)); */
@@ -73,23 +73,5 @@ const skills = await getCharacterSkills("albedo");
 }); 
 document.getElementById("elemental").addEventListening("click", function() {
 const damage = getRandomAttackValue("elemental", skills)})*/
-
-async function test() {
-  try {
-    const response = await fetch(
-      `https://genshin.jmp.blue/characters/all`
-    );
-    if (response.status != 200) {
-      throw new Error(response);
-    } else {
-      const data = await response.json();
-      data.forEach((a)=>console.log(a.name, a.skillTalents[0]["upgrades"][0].value));
-    }
-  } catch (error) {
-    alert("character not found");
-  }
-}
-
-test()
 
 export { getCharacterSkills };
