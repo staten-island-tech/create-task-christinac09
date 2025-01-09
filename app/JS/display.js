@@ -31,11 +31,16 @@ async function getCharacterData(character) {
 }
 
 function displayUserStats(user) {
+  /* DOMSelectors.statsContainer.classList.add(
+    "max-w-xl mx-auto p-6 rounded-lg shadow-lg"
+  ); */
   DOMSelectors.statsContainer.insertAdjacentHTML(
     "beforeend",
-    `<h2>${user.name} 200</h2>
-    <h2 id="coins">Currency: 200</h2>` // add wins,
+    `<h2>${user.name}</h2>
+    <h2 id="coins-stat">Coins: ${user.coins}</h2> 
+    <h2 id="cards-stat">Cards: ${user.cards}</h2>
+    <h2 id="wins-stat">Wins: ${user.wins}</h2>` // add wins,
   );
-} //should i make this a modal?
+}
 
-export { getAllData, getCharacterData };
+export { getAllData, getCharacterData, displayUserStats };

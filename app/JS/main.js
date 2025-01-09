@@ -1,15 +1,16 @@
 import "../CSS/style.css";
-import { getAllData } from "./display";
+import { getAllData, displayUserStats } from "./display";
 import { getCharacterSkills } from "./battle";
-import { DOMSelectors } from "./dom";
+import { DOMSelectors, clearContainers } from "./dom";
 
 const playerStats = [
   {
     // idk
     name: "player1",
-    currency: 200,
+    coins: 200,
     cards: [],
     health: 0,
+    wins: 0,
   },
   {
     name: "player2",
@@ -19,6 +20,7 @@ const playerStats = [
 ];
 
 const data = await getAllData();
+let characters;
 
 function getRandomCharacters(data, number) {
   // returns only 1 object if number is 1, returns an array of objects if number > 1
@@ -70,10 +72,7 @@ function drawWithRates(allData, number) {
 
 function updateUserCoins(type) {
   if (type === "pull") {
-    playerStats[0].currency -= 5;
-    document.getElementById(
-      "coins-stat"
-    ).innerHTML = `Currency: ${playerStats[0].currency}`;
+    playerStats[0].coins -= 5;
   }
 }
 
@@ -81,36 +80,28 @@ function officialPull(data, amount) {
   const pulls = drawWithRates(data, amount);
   console.log(pulls);
   // update stats
+  pulls.forEach((p)=>)
   playerStats[0].cards.push(pulls);
-  pulls.forEach((card) => {
-    document
-      .getElementById("cards-stat")
-      .insertAdjacentHTML("beforeend", `${card.name}, `);
-  });
 
   updateUserCoins("pull");
   return pulls;
 }
 
 function start() {
-  document
-    .getElementById("pull-start-btn")
-    .addEventListener("click", function () {
-      console.log("clicked");
-      DOMSelectors.pullContainer.insertAdjacentHTML(
-        "beforeend",
-        `<h2>heading</h2>
+  DOMSelectors.pullBtn.addEventListener("click", function () {
+    clearContainers();
+    DOMSelectors.pullContainer.insertAdjacentHTML(
+      "beforeend",
+      `<h2>heading</h2>
       <button class="btn btn-primary" id="pull-btn">Pull</button>
       <p id="pull-results-text">Results: </p>
       <p id="coins-results-text">Coins: </p>`
-      );
-      console.log(document.getElementById("pull-btn"));
-      something();
-    });
+    );
+    something();
+  });
 }
 
 function something() {
-  console.log("clicked", document.getElementById("pull-btn"));
   document.getElementById("pull-btn").addEventListener("click", function () {
     const results = officialPull(data, 5);
     //results.forEach((r)=>document.getElementById("pull-results-text"))
@@ -119,7 +110,15 @@ function something() {
         .getElementById("pull-results-text")
         .insertAdjacentHTML("beforeend", `${r.name} `)
     );
+    document.getElementById(
+      "coins-results-text"
+    ).innerHTML = `Coins: ${playerStats[0].coins}`;
   });
 }
+
+DOMSelectors.statsBtn.addEventListener("click", function () {
+  clearContainers();
+  displayUserStats(playerStats[0]);
+});
 
 start();
