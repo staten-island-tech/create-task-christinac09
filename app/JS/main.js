@@ -73,6 +73,8 @@ function drawWithRates(allData, number) {
 function updateUserCoins(type) {
   if (type === "pull") {
     playerStats[0].coins -= 5;
+  } else if (type === "duplicate") {
+    playerStats[0].coins += 10;
   }
 }
 
@@ -80,10 +82,22 @@ function officialPull(data, amount) {
   const pulls = drawWithRates(data, amount);
   console.log(pulls);
   // update stats
-  pulls.forEach((p)=>)
-  playerStats[0].cards.push(pulls);
-
+  pulls.forEach((p) => {
+    if (playerStats[0].cards.includes(p)) {
+      console.log("duplicate");
+      updateUserCoins("duplicate");
+      //add coins, update coins, display in html
+    } else {
+      playerStats[0].cards.push(p);
+      document
+        .getElementById("pull-results")
+        .insertAdjacentHTML("beforeend", `${p.name}, `);
+    }
+  });
   updateUserCoins("pull");
+  document.getElementById(
+    "coins-results"
+  ).innerHTML = `Coins: ${playerStats[0].coins}`;
   return pulls;
 }
 
@@ -94,8 +108,8 @@ function start() {
       "beforeend",
       `<h2>heading</h2>
       <button class="btn btn-primary" id="pull-btn">Pull</button>
-      <p id="pull-results-text">Results: </p>
-      <p id="coins-results-text">Coins: </p>`
+      <p id="pull-results">Results: </p>
+      <p id="coins-results">Coins: </p>`
     );
     something();
   });
@@ -104,15 +118,7 @@ function start() {
 function something() {
   document.getElementById("pull-btn").addEventListener("click", function () {
     const results = officialPull(data, 5);
-    //results.forEach((r)=>document.getElementById("pull-results-text"))
-    results.forEach((r) =>
-      document
-        .getElementById("pull-results-text")
-        .insertAdjacentHTML("beforeend", `${r.name} `)
-    );
-    document.getElementById(
-      "coins-results-text"
-    ).innerHTML = `Coins: ${playerStats[0].coins}`;
+    return results;
   });
 }
 
