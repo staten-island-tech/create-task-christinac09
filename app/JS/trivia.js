@@ -1,4 +1,4 @@
-import { getAllData } from "./display.js";
+import { getAllCharacterData } from "./display.js";
 import { DOMSelectors, clearContainers } from "./dom.js";
 
 function startGame(currentScore) {

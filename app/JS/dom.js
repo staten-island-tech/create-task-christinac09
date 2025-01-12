@@ -1,10 +1,10 @@
 const DOMSelectors = {
   homeContainer: document.getElementById("home-container"),
-  battleContainer: document.getElementById("battle-container"),
+  triviaContainer: document.getElementById("trivia-container"),
   pullContainer: document.getElementById("pull-container"),
   statsContainer: document.getElementById("stats-container"),
 
-  gameBtn: document.getElementById("game-start-btn"),
+  triviaBtn: document.getElementById("trivia-start-btn"),
   pullBtn: document.getElementById("pull-start-btn"),
   statsBtn: document.getElementById("stats-btn"),
 };
@@ -18,3 +18,4 @@ function clearContainers() {
 }
 
 export { DOMSelectors, clearContainers };
+
