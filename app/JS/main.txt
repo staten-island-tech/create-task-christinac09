@@ -150,8 +150,14 @@ function startPull(user) {
       );
     document.querySelector("#pull-btn").addEventListener("click", function(){
         document.querySelector("#pull-results").innerHTML=""
-        const results = officialPull(user, data, 5);
-        return results;
+        if (user.coins < 5) {
+          alert("you don't have enough coins. get coins from the game and come back later")
+          return
+        } else {
+          const results = officialPull(user, data, 5);
+          return results;
+        }
+        
     })
     });
 }

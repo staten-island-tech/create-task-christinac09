@@ -139,21 +139,27 @@ function officialPull(user, data, amount) {
 }
 
 function startPull(user) {
-    DOMSelectors.pullStartBtn.addEventListener("click", function () {
-      clearContainers();
-      DOMSelectors.pullContainer.insertAdjacentHTML(
-        "beforeend",
-        `<h2>Click the Button Below</h2>
-        <button class="btn btn-primary" id="pull-btn">Pull</button>
-        <p id="pull-results">Results: </p>
-        <p id="coins-results">Coins: </p>`
-      );
-    document.querySelector("#pull-btn").addEventListener("click", function(){
-        document.querySelector("#pull-results").innerHTML=""
+  DOMSelectors.pullStartBtn.addEventListener("click", function () {
+    clearContainers();
+    DOMSelectors.pullContainer.insertAdjacentHTML(
+      "beforeend",
+      `<h2>Click the Button Below</h2>
+      <button class="btn btn-primary" id="pull-btn">Pull</button>
+      <p id="pull-results">Results: </p>
+      <p id="coins-results">Coins: </p>`
+    );
+  document.querySelector("#pull-btn").addEventListener("click", function(){
+      document.querySelector("#pull-results").innerHTML=""
+      if (user.coins < 5) {
+        alert("you don't have enough coins. get coins from the game and come back later")
+        return
+      } else {
         const results = officialPull(user, data, 5);
         return results;
-    })
-    });
+      }
+      
+  })
+  });
 }
 
 function updateCoins(user, type) {
