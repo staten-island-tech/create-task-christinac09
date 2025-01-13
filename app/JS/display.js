@@ -1,6 +1,6 @@
-import { DOMSelectors } from "./dom";
+import { DOMSelectors, clearContainers } from "./dom";
 
-async function getAllCharacterData() {
+async function getAllData() {
   try {
     const response = await fetch(`https://genshin.jmp.blue/characters/all`);
     if (response.status != 200) {
@@ -30,7 +30,7 @@ async function getCharacterData(character) {
   }
 }
 
-async function getWeaponData(){
+/* async function getWeaponData(){
   try {
     const response = await fetch(`https://genshin.jmp.blue/weapons/all`);
     if (response.status != 200) {
@@ -42,21 +42,25 @@ async function getWeaponData(){
   } catch (error) {
     alert("could not find that weapon");
   } 
-}
+} */
 
 function displayUserStats(user) {
   /* DOMSelectors.statsContainer.classList.add(
     "max-w-xl mx-auto p-6 rounded-lg shadow-lg"
   ); */
-  DOMSelectors.statsContainer.insertAdjacentHTML(
-    "beforeend",
-    `<h2>${user.name}</h2>
-    <h2 id="coins-stat">Coins: ${user.coins}</h2> 
-    <h2 id="cards-stat">Cards: ${user.cards}</h2>
-    <h2 id="wins-stat">Wins: ${user.wins}</h2>
-    <h2 id="wins-stat">High Streak: ${user.wins}</h2>
-    ` // add wins,
-  );
+  
+  DOMSelectors.statsBtn.addEventListener("click", function(){
+    clearContainers()
+    DOMSelectors.statsContainer.insertAdjacentHTML(
+      "beforeend",
+      `<h2 id="coins-stat">Coins: ${user.coins}</h2> 
+      <h2 id="wins-stat">Accuracy: ${user.currentScore}/${user.totalAnswered}</h2>
+      <h2 id="streak-stat">Current Streak: ${user.streak}</h2>
+      <h2 id="cards-stat">Cards: ${user.cards}</h2>
+      ` // add wins,
+    );
+  })
+  
 }
 
-export { getAllCharacterData, getCharacterData, displayUserStats };
+export { getAllData, getCharacterData, displayUserStats };

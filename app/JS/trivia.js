@@ -1,16 +1,17 @@
-import { getAllCharacterData } from "./display.js";
 import { DOMSelectors, clearContainers } from "./dom.js";
+import { updateScore } from "./statsUpdates.js";
+import { getAllData } from "./display.js";
 
-function startGame(currentScore) {
-  DOMSelectors.gameStartBtn.addEventListener("click", function () {
-    game(currentScore);
+function startGame(user) {
+  DOMSelectors.triviaBtn.addEventListener("click", function () {
+    game(user);
   });
 }
 
-async function game(score) {
+async function game(user) {
   console.log("game clicked");
-  const data = await getAllData();
   clearContainers();
+  const data = await getAllData()
   let test = "";
   let character;
   while (test === "") {
@@ -25,22 +26,24 @@ async function game(score) {
   for (let i = 0; i < 3; i++) {
     const randomInteger = Math.floor(Math.random() * data.length);
     const name = data[randomInteger].name;
-    wrongAns.push(name);
+    if (wrongAns !== correctAns) {
+      wrongAns.push(name);
+    }
   }
-  createQuestion(character, wrongAns, correctAns, score);
-  checkCorrect(correctAns, score);
+  createQuestion(character, wrongAns, correctAns, user);
+  checkCorrect(correctAns, user);
 }
 
-function createQuestion(characterData, wrongAns, correctAns, score) {
+function createQuestion(characterData, wrongAns, correctAns, user) {
   wrongAns.push(correctAns);
   shuffle(wrongAns);
   console.log(wrongAns);
-  DOMSelectors.gameContainer.insertAdjacentHTML(
+  DOMSelectors.triviaContainer.insertAdjacentHTML(
     "beforeend",
-    `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}</h2>
-      <h3 class="text-xl text-center mb-4" id="score">Score: ${score}</h3><form id="question-form"><button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button></form>`
+    `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
+      <h3 class="text-xl text-center mb-4" id="score">Score: ${user.currentScore}</h3><form id="question-form"><button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button></form>`
   );
-  DOMSelectors.gameContainer.classList.add("bg-base-100");
+  DOMSelectors.triviaContainer.classList.add("bg-base-100");
   wrongAns.forEach((ans) => {
     document.getElementById("question-form").insertAdjacentHTML(
       "afterbegin",
@@ -54,7 +57,7 @@ function createQuestion(characterData, wrongAns, correctAns, score) {
   });
 }
 
-function checkCorrect(correctAns, score) {
+function checkCorrect(correctAns, user) {
   document
     .getElementById("question-form")
     .addEventListener("submit", function (event) {
@@ -73,24 +76,16 @@ function checkCorrect(correctAns, score) {
         alert("choose an answer please");
       } else {
         if (selected === correctAns) {
-          score++;
-          console.log(score);
-          updateScore(score, "correct");
+          updateScore(user, "correct");
         } else {
-          updateScore(score, "wrong");
+          updateScore(user, "wrong");
         }
-        game(score);
+        game(user);
       }
     });
 }
 
-function updateScore(score, type) {
-  if (type === "correct") {
-    document.querySelector("#score").innerHTML = `Score: ${score}\nCorrect!`;
-  } else {
-    document.querySelector("#score").innerHTML = `Score: ${score}\nWrong!`;
-  }
-}
+
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {

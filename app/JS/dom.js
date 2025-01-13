@@ -1,17 +1,17 @@
 const DOMSelectors = {
-  homeContainer: document.getElementById("home-container"),
-  triviaContainer: document.getElementById("trivia-container"),
-  pullContainer: document.getElementById("pull-container"),
-  statsContainer: document.getElementById("stats-container"),
+  homeContainer: document.querySelector("#home-container"),
+  triviaContainer: document.querySelector("#trivia-container"),
+  pullContainer: document.querySelector("#pull-container"),
+  statsContainer: document.querySelector("#stats-container"),
 
-  triviaBtn: document.getElementById("trivia-start-btn"),
-  pullBtn: document.getElementById("pull-start-btn"),
-  statsBtn: document.getElementById("stats-btn"),
+  triviaBtn: document.querySelector("#trivia-start-btn"),
+  pullBtn: document.querySelector("#pull-start-btn"),
+  statsBtn: document.querySelector("#stats-btn"),
 };
 
-function clearContainers() {
+function clearContainers() {  
   DOMSelectors.homeContainer.innerHTML = "";
-  DOMSelectors.battleContainer.innerHTML = "";
+  DOMSelectors.triviaContainer.innerHTML = "";
   DOMSelectors.pullContainer.innerHTML = "";
   DOMSelectors.statsContainer.innerHTML = "";
   //DOMSelectors.forEach((container) => (container.innerHTML = ""));
