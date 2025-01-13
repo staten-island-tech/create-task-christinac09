@@ -1,5 +1,8 @@
 import { updateCoins } from "./statsUpdates";
 import { DOMSelectors,clearContainers } from "./dom";
+import { getAllData } from "./display";
+
+const data = await getAllData()
 
 function getRandomCharacters(data, number) {
     // returns only 1 object if number is 1, returns an array of objects if number > 1
@@ -25,7 +28,7 @@ function getSorted(data, rarity) {
     } else if (rarity === 5) {
       sorted = data.filter((c) => c.rarity === 5);
     } else {
-      console.log("somethings wrong");
+      console.log("something's wrong");
     }
     return sorted;
   }
@@ -52,12 +55,13 @@ function drawWithRates(allData, number) {
 function officialPull(user, data, amount) {
     const pulls = drawWithRates(data, amount);
     console.log(pulls);
-    // update stats
     pulls.forEach((p) => {
       if (user.cards.includes(p)) {
         console.log("duplicate");
         updateCoins(user, "duplicate");
-        //add coins, update coins, display in html
+        document
+          .getElementById("pull-results")
+          .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
       } else {
         user.cards.push(p);
         document
@@ -73,17 +77,20 @@ function officialPull(user, data, amount) {
   }
 
 function startPull(user) {
-    DOMSelectors.pullBtn.addEventListener("click", function () {
+    DOMSelectors.pullStartBtn.addEventListener("click", function () {
       clearContainers();
       DOMSelectors.pullContainer.insertAdjacentHTML(
         "beforeend",
-        `<h2>heading</h2>
+        `<h2>Click the Button Below</h2>
         <button class="btn btn-primary" id="pull-btn">Pull</button>
         <p id="pull-results">Results: </p>
         <p id="coins-results">Coins: </p>`
       );
-    const results = officialPull(user, data, 5);
-    return results;
+    document.querySelector("#pull-btn").addEventListener("click", function(){
+        document.querySelector("#pull-results").innerHTML=""
+        const results = officialPull(user, data, 5);
+        return results;
+    })
     });
   }
 

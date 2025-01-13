@@ -5,7 +5,7 @@ const DOMSelectors = {
   statsContainer: document.querySelector("#stats-container"),
 
   triviaBtn: document.querySelector("#trivia-start-btn"),
-  pullBtn: document.querySelector("#pull-start-btn"),
+  pullStartBtn: document.querySelector("#pull-start-btn"),
   statsBtn: document.querySelector("#stats-btn"),
 };
 

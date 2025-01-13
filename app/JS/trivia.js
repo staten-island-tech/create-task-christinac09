@@ -41,7 +41,11 @@ function createQuestion(characterData, wrongAns, correctAns, user) {
   DOMSelectors.triviaContainer.insertAdjacentHTML(
     "beforeend",
     `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
-      <h3 class="text-xl text-center mb-4" id="score">Score: ${user.currentScore}</h3><form id="question-form"><button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button></form>`
+      <h3 class="text-xl text-center mb-4" id="score">Score: ${user.currentScore}</h3>
+      <h3 class="text-xl text-center mb-4" id="streak">Streak: ${user.streak}</h3>
+      <form id="question-form">
+      <button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button>
+      </form>`
   );
   DOMSelectors.triviaContainer.classList.add("bg-base-100");
   wrongAns.forEach((ans) => {

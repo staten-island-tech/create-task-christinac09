@@ -10,15 +10,17 @@ function updateCoins(user, type) {
 
 function updateScore(user, type) {
     if (type === "correct") {
-      document.querySelector("#score").innerHTML = `Score: ${score}\nCorrect!`;
       user.currentScore++
       user.totalAnswered++
       user.streak++
       updateCoins(user, "correct")
+      document.querySelector("#score").innerHTML = `Score: ${user.currentScore}\nCorrect! +5 coins`;
+      document.querySelector("#streak").innerHTML = `Streak: ${user.streak}`
     } else {
-      document.querySelector("#score").innerHTML = `Score: ${score}\nWrong!`;
       user.totalAnswered++
       user.streak = 0
+      document.querySelector("#score").innerHTML = `Score: ${user.currentScore}\nWrong!`;
+      document.querySelector("#streak").innerHTML = `Streak: ${user.streak}`
     }
   }
 
