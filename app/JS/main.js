@@ -21,7 +21,7 @@ const user = {
   totalAnswered: 0,
   streak: 0,
   coins: 0,
-  cards: [], // only unique cards
+  cards: [],
 };
 
 let cardHistory = []; //includes duplicates
