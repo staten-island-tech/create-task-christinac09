@@ -56,15 +56,14 @@ function displayUserStats(user) {
       `<h2 id="coins-stat">Coins: ${user.coins}</h2> 
       <h2 id="wins-stat">Accuracy: ${user.currentScore}/${user.totalAnswered}</h2>
       <h2 id="streak-stat">Current Streak: ${user.streak}</h2>
-      `
+      <h2 id="cards-stat">Cards: </h2>`
     );
     user.cards.forEach((card) => {
-      DOMSelectors.statsContainer.insertAdjacentHTML("beforeend",
-        `<h2 id="cards-stat">Cards: ${card.name} (${card.rarity}-star)</h2>`
+      document.querySelector("#cards-stat").insertAdjacentHTML("beforeend",
+        `${card.name} (${card.rarity}-star), `
       )
     });
   })
-  
 }
 
 export { getAllData, getCharacterData, displayUserStats };

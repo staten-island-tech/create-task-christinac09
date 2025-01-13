@@ -17,7 +17,7 @@ async function main() {
     const data = await getAllData()
     startGame(user)
     displayUserStats(user);
-    startPull(user)
+    startPull(user, data)
 }
 
 //main()

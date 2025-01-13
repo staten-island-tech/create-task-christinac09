@@ -76,7 +76,7 @@ function officialPull(user, data, amount) {
     return pulls;
   }
 
-function startPull(user) {
+function startPull(user, data) {
     DOMSelectors.pullStartBtn.addEventListener("click", function () {
       clearContainers();
       DOMSelectors.pullContainer.insertAdjacentHTML(
@@ -87,7 +87,7 @@ function startPull(user) {
         <p id="coins-results">Coins: </p>`
       );
     document.querySelector("#pull-btn").addEventListener("click", function(){
-        document.querySelector("#pull-results").innerHTML=""
+        document.querySelector("#pull-results").innerHTML="Results: "
         if (user.coins < 5) {
           alert("you don't have enough coins. get coins from the game and come back later")
           return
@@ -95,9 +95,8 @@ function startPull(user) {
           const results = officialPull(user, data, 5);
           return results;
         }
-        
     })
     });
-  }
+}
 
 export {startPull}
