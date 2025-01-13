@@ -21,11 +21,9 @@ const user = {
     totalAnswered: 0,
     streak: 0,
     coins: 0,
-    cards: [],  // only unique cards
+    cards: [],
 }
 const data = await getAllData()
-
-let cardHistory = []  //includes duplicates
 
 async function main() {
     startGame(user)
@@ -69,7 +67,6 @@ function displayUserStats(user) {
 }
 
 function getRandomCharacters(data, number) {
-    // returns only 1 object if number is 1, returns an array of objects if number > 1
     if (number === 1) {
       const randomInteger = Math.floor(Math.random() * data.length);
       const randomCharacter = data[randomInteger];
@@ -260,7 +257,6 @@ function checkCorrect(correctAns, user) {
             break;
           }
         }
-        /* selected = document.querySelector('input[name="answer"]:checked').value; this causes an error bc there's no checked radiobtns yet */
         console.log(selected);
         if (selected === null) {
           alert("choose an answer please");
@@ -274,8 +270,6 @@ function checkCorrect(correctAns, user) {
         }
       });
   }
-  
-  
   
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
