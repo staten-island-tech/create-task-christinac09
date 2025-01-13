@@ -8,3 +8,7 @@ ideas:
 - what they get for winning: 5(?) coins for each ques, and extra # of coins for highest streak
 - include commentary for getting ques correct and wrong
 - can also use coins to buy hints (eliminate ans, give extra info abt the char, etc.)
+
+algorithms to use for personalized project reference thing:
+- getrandomcharacters - has everything but selection not in loop
+- drawwithrates - has everything
