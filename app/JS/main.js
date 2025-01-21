@@ -288,3 +288,6 @@ function shuffle(array) {
   }
   return array;
 }
+
+// Credit to genshin.dev api
+// Character data from public API: https://github.com/genshindev/api?tab=readme-ov-file
