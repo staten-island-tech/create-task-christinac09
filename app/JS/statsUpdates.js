@@ -5,6 +5,10 @@ function updateCoins(user, type) {
       user.coins += 10;
     } else if (type === "correct") {
         user.coins += 5
+    } else if (type === "random") {
+      const randomInteger = Math.floor(Math.random()*15)
+      user.coins += randomInteger
+      return randomInteger
     }
   }
 
