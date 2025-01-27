@@ -117,26 +117,34 @@ function drawWithRates(allData, number) {
 }
 
 function officialPull(user, data, amount) {
-  const pulls = drawWithRates(data, amount);
-  console.log(pulls);
-  pulls.forEach((p) => {
-    if (user.cards.includes(p)) {
-      console.log("duplicate");
-      updateCoins(user, "duplicate");
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
-    } else {
-      user.cards.push(p);
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name}, `);
-    }
-  });
-  updateCoins(user, "pull");
-  document.getElementById("coins-results").innerHTML = `Coins: ${user.coins}`;
-  return pulls;
-}
+  const randomInteger = Math.floor(Math.random() * amount) //randomInteger = # of char they get
+  console.log(randomInteger)
+  for (let i=0; i<(amount-randomInteger); i++) {  //amount-randomInteger is # of times get coins
+    const randomCoins = updateCoins(user, "random")
+    document.getElementById("pull-results").insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
+  }
+    const pulls = drawWithRates(data, randomInteger);             // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
+    console.log(pulls);
+    pulls.forEach((p) => {
+      if (user.cards.includes(p)) {
+        console.log("duplicate");
+        updateCoins(user, "duplicate");
+        document
+          .getElementById("pull-results")
+          .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
+      } else {
+        user.cards.push(p);
+        document
+          .getElementById("pull-results")
+          .insertAdjacentHTML("beforeend", `${p.name}, `);
+      }
+    });
+    updateCoins(user, "pull");
+    document.getElementById(
+      "coins-results"
+    ).innerHTML = `Coins: ${user.coins}`;
+    return pulls;
+  }
 
 function startPull(user, data) {
   DOMSelectors.pullStartBtn.addEventListener("click", function () {
@@ -169,7 +177,11 @@ function updateCoins(user, type) {
   } else if (type === "duplicate") {
     user.coins += 10;
   } else if (type === "correct") {
-    user.coins += 5;
+      user.coins += 5
+  } else if (type === "random") {
+    const randomInteger = Math.floor(Math.random()*10)
+    user.coins += randomInteger
+    return randomInteger
   }
 }
 
