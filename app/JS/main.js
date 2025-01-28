@@ -122,7 +122,9 @@ function officialPull(user, data, amount) {
   console.log(randomInteger)
   for (let i=0; i<(amount-randomInteger); i++) {  //amount-randomInteger is # of times get coins
     const randomCoins = updateCoins(user, "random")
-    document.getElementById("pull-results").insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
+    document
+      .getElementById("pull-results")
+      .insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
   }
     const pulls = drawWithRates(data, randomInteger);             // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
     console.log(pulls);
