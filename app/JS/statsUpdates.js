@@ -1,12 +1,12 @@
 function updateCoins(user, type) {
     if (type === "pull") {
-      user.coins -= 5;
+      user.coins -= 10;
     } else if (type === "duplicate") {
       user.coins += 10;
     } else if (type === "correct") {
         user.coins += 5
     } else if (type === "random") {
-      const randomInteger = Math.floor(Math.random()*10)
+      const randomInteger = Math.floor(Math.random()*5)
       user.coins += randomInteger
       return randomInteger
     }

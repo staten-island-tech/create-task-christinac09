@@ -87,14 +87,15 @@ function startPull(user, data) {
       clearContainers();
       DOMSelectors.pullContainer.insertAdjacentHTML(
         "beforeend",
-        `<h2>Click the Button Below</h2>
-        <button class="btn btn-primary" id="pull-btn">Pull</button>
-        <p id="pull-results">Results: </p>
-        <p id="coins-results">Coins: </p>`
+        `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
+        <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
+        <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
+        <p class="text-lg" id="pull-results">Results: </p>
+        `
       );
     document.querySelector("#pull-btn").addEventListener("click", function(){
         document.querySelector("#pull-results").innerHTML="Results: "
-        if (user.coins < 5) {
+        if (user.coins < 10) {
           alert("you don't have enough coins. get coins from the game and come back later")
           return
         } else {

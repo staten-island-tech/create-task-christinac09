@@ -15,6 +15,7 @@ function clearContainers() {
   DOMSelectors.triviaContainer.innerHTML = "";
   DOMSelectors.pullContainer.innerHTML = "";
   DOMSelectors.statsContainer.innerHTML = "";
+  DOMSelectors.triviaContainer.classList.remove("bg-base-100")
 }
 const user = {
   currentScore: 0,
@@ -146,40 +147,39 @@ function officialPull(user, data, amount) {
     return pulls;
   }
 
-function startPull(user, data) {
-  DOMSelectors.pullStartBtn.addEventListener("click", function () {
-    clearContainers();
-    DOMSelectors.pullContainer.insertAdjacentHTML(
-      "beforeend",
-      `<h2>Click the Button Below</h2>
-      <button class="btn btn-primary" id="pull-btn">Pull</button>
-      <p id="pull-results">Results: </p>
-      <p id="coins-results">Coins: </p>`
-    );
-    document.querySelector("#pull-btn").addEventListener("click", function () {
-      document.querySelector("#pull-results").innerHTML = "Results: ";
-      if (user.coins < 5) {
-        alert(
-          "you don't have enough coins. get coins from the game and come back later"
-        );
-        return;
-      } else {
-        const results = officialPull(user, data, 5);
-        return results;
-      }
+  function startPull(user, data) {
+    DOMSelectors.pullStartBtn.addEventListener("click", function () {
+      clearContainers();
+      DOMSelectors.pullContainer.insertAdjacentHTML(
+        "beforeend",
+        `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
+        <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
+        <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
+        <p class="text-lg" id="pull-results">Results: </p>
+        `
+      );
+    document.querySelector("#pull-btn").addEventListener("click", function(){
+        document.querySelector("#pull-results").innerHTML="Results: "
+        if (user.coins < 10) {
+          alert("you don't have enough coins. get coins from the game and come back later")
+          return
+        } else {
+          const results = officialPull(user, data, 5);
+          return results;
+        }
+    })
     });
-  });
 }
 
 function updateCoins(user, type) {
   if (type === "pull") {
-    user.coins -= 5;
+    user.coins -= 10;
   } else if (type === "duplicate") {
     user.coins += 10;
   } else if (type === "correct") {
       user.coins += 5
   } else if (type === "random") {
-    const randomInteger = Math.floor(Math.random()*10)
+    const randomInteger = Math.floor(Math.random()*5)
     user.coins += randomInteger
     return randomInteger
   }
@@ -213,8 +213,8 @@ function startGame(user) {
 
 async function game(user) {
   console.log("game clicked");
-  clearContainers();
   const data = await getAllData();
+  clearContainers();
   let test = "";
   let character;
   while (test === "") {
@@ -245,7 +245,7 @@ function createQuestion(characterData, wrongAns, correctAns, user) {
   DOMSelectors.triviaContainer.insertAdjacentHTML(
     "beforeend",
     `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
-        <h3 class="text-xl text-center mb-4" id="score">Score: ${user.currentScore}</h3>
+        <h3 class="text-xl text-center" id="score">Score: ${user.currentScore}</h3>
         <h3 class="text-xl text-center mb-4" id="streak">Streak: ${user.streak}</h3>
         <form id="question-form">
         <button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button>
