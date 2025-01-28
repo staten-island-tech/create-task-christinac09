@@ -70,7 +70,6 @@ function displayUserStats(user) {
 }
 
 function getRandomCharacters(data, number) {
-  // returns only 1 object if number is 1, returns an array of objects if number > 1
   if (number === 1) {
     const randomInteger = Math.floor(Math.random() * data.length);
     const randomCharacter = data[randomInteger];
@@ -116,13 +115,12 @@ function drawWithRates(allData, number) {
 }
 
 function officialPull(user, data, amount) {
-  const randomInteger = Math.floor(Math.random() * amount) //randomInteger = # of char they get
-  console.log(randomInteger)
-  for (let i=0; i<(amount-randomInteger); i++) {  //amount-randomInteger is # of times get coins
+  const randomInteger = Math.floor(Math.random() * amount)
+  for (let i=0; i<(amount-randomInteger); i++) {
     const randomCoins = updateCoins(user, "random")
     document.getElementById("pull-results").insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
   }
-    const pulls = drawWithRates(data, randomInteger);             // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
+    const pulls = drawWithRates(data, randomInteger);
     console.log(pulls);
     pulls.forEach((p) => {
       if (user.cards.includes(p)) {
