@@ -15,16 +15,15 @@ function clearContainers() {
   DOMSelectors.triviaContainer.innerHTML = "";
   DOMSelectors.pullContainer.innerHTML = "";
   DOMSelectors.statsContainer.innerHTML = "";
+  DOMSelectors.triviaContainer.classList.remove("bg-base-100")
 }
 const user = {
   currentScore: 0,
   totalAnswered: 0,
   streak: 0,
   coins: 0,
-  cards: [], // only unique cards
+  cards: [],
 };
-
-let cardHistory = []; //includes duplicates
 
 async function main() {
   const data = await getAllData();
@@ -117,59 +116,70 @@ function drawWithRates(allData, number) {
 }
 
 function officialPull(user, data, amount) {
-  const pulls = drawWithRates(data, amount);
-  console.log(pulls);
-  pulls.forEach((p) => {
-    if (user.cards.includes(p)) {
-      console.log("duplicate");
-      updateCoins(user, "duplicate");
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
-    } else {
-      user.cards.push(p);
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name}, `);
-    }
-  });
-  updateCoins(user, "pull");
-  document.getElementById("coins-results").innerHTML = `Coins: ${user.coins}`;
-  return pulls;
-}
-
-function startPull(user, data) {
-  DOMSelectors.pullStartBtn.addEventListener("click", function () {
-    clearContainers();
-    DOMSelectors.pullContainer.insertAdjacentHTML(
-      "beforeend",
-      `<h2>Click the Button Below</h2>
-      <button class="btn btn-primary" id="pull-btn">Pull</button>
-      <p id="pull-results">Results: </p>
-      <p id="coins-results">Coins: </p>`
-    );
-    document.querySelector("#pull-btn").addEventListener("click", function () {
-      document.querySelector("#pull-results").innerHTML = "Results: ";
-      if (user.coins < 5) {
-        alert(
-          "you don't have enough coins. get coins from the game and come back later"
-        );
-        return;
+  const randomInteger = Math.floor(Math.random() * amount) //randomInteger = # of char they get
+  console.log(randomInteger)
+  for (let i=0; i<(amount-randomInteger); i++) {  //amount-randomInteger is # of times get coins
+    const randomCoins = updateCoins(user, "random")
+    document.getElementById("pull-results").insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
+  }
+    const pulls = drawWithRates(data, randomInteger);             // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
+    console.log(pulls);
+    pulls.forEach((p) => {
+      if (user.cards.includes(p)) {
+        console.log("duplicate");
+        updateCoins(user, "duplicate");
+        document
+          .getElementById("pull-results")
+          .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
       } else {
-        const results = officialPull(user, data, 5);
-        return results;
+        user.cards.push(p);
+        document
+          .getElementById("pull-results")
+          .insertAdjacentHTML("beforeend", `${p.name}, `);
       }
     });
-  });
+    updateCoins(user, "pull");
+    document.getElementById(
+      "coins-results"
+    ).innerHTML = `Coins: ${user.coins}`;
+    return pulls;
+  }
+
+  function startPull(user, data) {
+    DOMSelectors.pullStartBtn.addEventListener("click", function () {
+      clearContainers();
+      DOMSelectors.pullContainer.insertAdjacentHTML(
+        "beforeend",
+        `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
+        <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
+        <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
+        <p class="text-lg" id="pull-results">Results: </p>
+        `
+      );
+    document.querySelector("#pull-btn").addEventListener("click", function(){
+        document.querySelector("#pull-results").innerHTML="Results: "
+        if (user.coins < 10) {
+          alert("you don't have enough coins. get coins from the game and come back later")
+          return
+        } else {
+          const results = officialPull(user, data, 5);
+          return results;
+        }
+    })
+    });
 }
 
 function updateCoins(user, type) {
   if (type === "pull") {
-    user.coins -= 5;
+    user.coins -= 10;
   } else if (type === "duplicate") {
     user.coins += 10;
   } else if (type === "correct") {
-    user.coins += 5;
+      user.coins += 5
+  } else if (type === "random") {
+    const randomInteger = Math.floor(Math.random()*5)
+    user.coins += randomInteger
+    return randomInteger
   }
 }
 
@@ -201,8 +211,8 @@ function startGame(user) {
 
 async function game(user) {
   console.log("game clicked");
-  clearContainers();
   const data = await getAllData();
+  clearContainers();
   let test = "";
   let character;
   while (test === "") {
@@ -228,11 +238,12 @@ async function game(user) {
 function createQuestion(characterData, wrongAns, correctAns, user) {
   wrongAns.push(correctAns);
   shuffle(wrongAns);
+  console.log(correctAns);
   console.log(wrongAns);
   DOMSelectors.triviaContainer.insertAdjacentHTML(
     "beforeend",
     `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
-        <h3 class="text-xl text-center mb-4" id="score">Score: ${user.currentScore}</h3>
+        <h3 class="text-xl text-center" id="score">Score: ${user.currentScore}</h3>
         <h3 class="text-xl text-center mb-4" id="streak">Streak: ${user.streak}</h3>
         <form id="question-form">
         <button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button>
@@ -287,3 +298,6 @@ function shuffle(array) {
   }
   return array;
 }
+
+// Credit to genshin.dev api
+// Character data from public API: https://github.com/genshindev/api?tab=readme-ov-file
