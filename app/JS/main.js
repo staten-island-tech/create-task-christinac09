@@ -15,13 +15,13 @@ function clearContainers() {
   DOMSelectors.triviaContainer.innerHTML = "";
   DOMSelectors.pullContainer.innerHTML = "";
   DOMSelectors.statsContainer.innerHTML = "";
-  DOMSelectors.triviaContainer.classList.remove("bg-base-100")
+  DOMSelectors.triviaContainer.classList.remove("bg-base-100");
 }
 const user = {
   currentScore: 0,
   totalAnswered: 0,
   streak: 0,
-  coins: 0,
+  coins: 10, //change back to 0 + delete comments & console.log
   cards: [],
 };
 
@@ -46,7 +46,7 @@ async function getAllData() {
       return data;
     }
   } catch (error) {
-    alert("could not find that character");
+    alert("could not retrieve character data");
   }
 }
 
@@ -61,12 +61,23 @@ function displayUserStats(user) {
       <h2 id="cards-stat">Cards: </h2>`
     );
     user.cards.forEach((card) => {
-      document
-        .querySelector("#cards-stat")
-        .insertAdjacentHTML(
-          "beforeend",
-          `${card.name} (${card.rarity}-star), `
-        );
+      document.querySelector("#cards-stat").insertAdjacentHTML(
+        "beforeend",
+        `<div class="card bg-base-100 w-96 shadow-sm">
+  <figure>
+    <img
+      src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
+      alt="${card.name} icon" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title">
+      ${card.name}
+      <div class="badge badge-secondary">${card.rarity}-star</div>
+    </h2>
+    <p>${card.description}</p>
+  </div>
+</div>`
+      );
     });
   });
 }
@@ -118,59 +129,60 @@ function drawWithRates(allData, number) {
 }
 
 function officialPull(user, data, amount) {
-  const randomInteger = Math.floor(Math.random() * amount) //randomInteger = # of char they get
-  console.log(randomInteger)
-  for (let i=0; i<(amount-randomInteger); i++) {  //amount-randomInteger is # of times get coins
-    const randomCoins = updateCoins(user, "random")
+  const randomInteger = Math.floor(Math.random() * amount); //randomInteger = # of char they get
+  console.log(randomInteger);
+  for (let i = 0; i < amount - randomInteger; i++) {
+    //amount-randomInteger is # of times get coins
+    const randomCoins = updateCoins(user, "random");
     document
       .getElementById("pull-results")
-      .insertAdjacentHTML("beforeend",`+${randomCoins} coins, `)
+      .insertAdjacentHTML("beforeend", `+${randomCoins} coins, `);
   }
-    const pulls = drawWithRates(data, randomInteger);             // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
-    console.log(pulls);
-    pulls.forEach((p) => {
-      if (user.cards.includes(p)) {
-        console.log("duplicate");
-        updateCoins(user, "duplicate");
-        document
-          .getElementById("pull-results")
-          .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
-      } else {
-        user.cards.push(p);
-        document
-          .getElementById("pull-results")
-          .insertAdjacentHTML("beforeend", `${p.name}, `);
-      }
-    });
-    updateCoins(user, "pull");
-    document.getElementById(
-      "coins-results"
-    ).innerHTML = `Coins: ${user.coins}`;
-    return pulls;
-  }
+  const pulls = drawWithRates(data, randomInteger); // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
+  console.log(pulls);
+  pulls.forEach((p) => {
+    if (user.cards.includes(p)) {
+      console.log("duplicate");
+      updateCoins(user, "duplicate");
+      document
+        .getElementById("pull-results")
+        .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
+    } else {
+      user.cards.push(p);
+      document
+        .getElementById("pull-results")
+        .insertAdjacentHTML("beforeend", `${p.name}, `);
+    }
+  });
+  updateCoins(user, "pull");
+  document.getElementById("coins-results").innerHTML = `Coins: ${user.coins}`;
+  return pulls;
+}
 
-  function startPull(user, data) {
-    DOMSelectors.pullStartBtn.addEventListener("click", function () {
-      clearContainers();
-      DOMSelectors.pullContainer.insertAdjacentHTML(
-        "beforeend",
-        `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
+function startPull(user, data) {
+  DOMSelectors.pullStartBtn.addEventListener("click", function () {
+    clearContainers();
+    DOMSelectors.pullContainer.insertAdjacentHTML(
+      "beforeend",
+      `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
         <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
         <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
         <p class="text-lg" id="pull-results">Results: </p>
         `
-      );
-    document.querySelector("#pull-btn").addEventListener("click", function(){
-        document.querySelector("#pull-results").innerHTML="Results: "
-        if (user.coins < 10) {
-          alert("you don't have enough coins. get coins from the game and come back later")
-          return
-        } else {
-          const results = officialPull(user, data, 5);
-          return results;
-        }
-    })
+    );
+    document.querySelector("#pull-btn").addEventListener("click", function () {
+      document.querySelector("#pull-results").innerHTML = "Results: ";
+      if (user.coins < 10) {
+        alert(
+          "you don't have enough coins. get coins from the game and come back later"
+        );
+        return;
+      } else {
+        const results = officialPull(user, data, 5);
+        return results;
+      }
     });
+  });
 }
 
 function updateCoins(user, type) {
@@ -179,11 +191,11 @@ function updateCoins(user, type) {
   } else if (type === "duplicate") {
     user.coins += 10;
   } else if (type === "correct") {
-      user.coins += 5
+    user.coins += 5;
   } else if (type === "random") {
-    const randomInteger = Math.floor(Math.random()*5)
-    user.coins += randomInteger
-    return randomInteger
+    const randomInteger = Math.floor(Math.random() * 5);
+    user.coins += randomInteger;
+    return randomInteger;
   }
 }
 
