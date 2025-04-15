@@ -25,8 +25,6 @@ const user = {
   cards: [],
 };
 
-let cardHistory = []; //includes duplicates
-
 async function main() {
   const data = await getAllData();
   startGame(user);
@@ -106,7 +104,7 @@ function getSorted(data, rarity) {
   } else if (rarity === 5) {
     sorted = data.filter((c) => c.rarity === 5);
   } else {
-    console.log("something's wrong");
+    alert("something's wrong with sorting");
   }
   return sorted;
 }
@@ -115,10 +113,8 @@ function drawWithRates(allData, number) {
   const pulls = [];
   for (let i = 0; i < number; i++) {
     const randomInteger = Math.floor(Math.random() * 100);
-    console.log("Random Integer: " + randomInteger);
     let sorted = [];
     if (randomInteger % 7 === 0) {
-      console.log("5 STAR !!");
       sorted = getSorted(allData, 5);
     } else {
       sorted = getSorted(allData, 4);
@@ -129,20 +125,16 @@ function drawWithRates(allData, number) {
 }
 
 function officialPull(user, data, amount) {
-  const randomInteger = Math.floor(Math.random() * amount); //randomInteger = # of char they get
-  console.log(randomInteger);
+  const randomInteger = Math.floor(Math.random() * amount);
   for (let i = 0; i < amount - randomInteger; i++) {
-    //amount-randomInteger is # of times get coins
     const randomCoins = updateCoins(user, "random");
     document
       .getElementById("pull-results")
       .insertAdjacentHTML("beforeend", `+${randomCoins} coins, `);
   }
-  const pulls = drawWithRates(data, randomInteger); // CHANGE AMT SO THAT SOME OF THE 5 PULLS ARE COINS AND NOT 5 CHARACTERS, but how to randomize # of char?
-  console.log(pulls);
+  const pulls = drawWithRates(data, randomInteger);
   pulls.forEach((p) => {
     if (user.cards.includes(p)) {
-      console.log("duplicate");
       updateCoins(user, "duplicate");
       document
         .getElementById("pull-results")
@@ -226,7 +218,6 @@ function startGame(user) {
 }
 
 async function game(user) {
-  console.log("game clicked");
   const data = await getAllData();
   clearContainers();
   let test = "";
@@ -254,8 +245,6 @@ async function game(user) {
 function createQuestion(characterData, wrongAns, correctAns, user) {
   wrongAns.push(correctAns);
   shuffle(wrongAns);
-  console.log(correctAns);
-  console.log(wrongAns);
   DOMSelectors.triviaContainer.insertAdjacentHTML(
     "beforeend",
     `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
@@ -292,8 +281,6 @@ function checkCorrect(correctAns, user) {
           break;
         }
       }
-      /* selected = document.querySelector('input[name="answer"]:checked').value; this causes an error bc there's no checked radiobtns yet */
-      console.log(selected);
       if (selected === null) {
         alert("choose an answer please");
       } else {
@@ -315,5 +302,5 @@ function shuffle(array) {
   return array;
 }
 
-// Credit to genshin.dev api
+// Credits to genshin.dev api
 // Character data from public API: https://github.com/genshindev/api?tab=readme-ov-file
