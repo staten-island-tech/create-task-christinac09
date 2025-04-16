@@ -128,22 +128,63 @@ function officialPull(user, data, amount) {
   const randomInteger = Math.floor(Math.random() * amount);
   for (let i = 0; i < amount - randomInteger; i++) {
     const randomCoins = updateCoins(user, "random");
-    document
-      .getElementById("pull-results")
-      .insertAdjacentHTML("beforeend", `+${randomCoins} coins, `);
+    document.getElementById("pull-results").insertAdjacentHTML(
+      "beforeend",
+      `<div class="card bg-base-100 w-[26%] shadow-sm" id="coin-result-card">
+  <figure>
+    <img
+      src="https://www.onlygfx.com/wp-content/uploads/2020/11/stack-of-gold-coins-1.png"
+      alt="coins" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title">
+      +${randomCoins} coins
+    </h2>
+  </div>
+</div>`
+    );
   }
   const pulls = drawWithRates(data, randomInteger);
-  pulls.forEach((p) => {
-    if (user.cards.includes(p)) {
+  pulls.forEach((card) => {
+    if (user.cards.includes(card)) {
       updateCoins(user, "duplicate");
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name} (duplicate +10 coins), `);
+      document.getElementById("pull-results").insertAdjacentHTML(
+        "beforeend",
+        `<div class="card bg-base-100 w-[26%] shadow-sm">
+          <figure>
+            <img
+              src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
+              alt="${card.name} icon" />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">
+              ${card.name}
+              <div class="badge badge-secondary">${card.rarity}-star</div>
+              <div class="badge badge-primary">DUPLICATE (+10 coins)</div>
+            </h2>
+            <p>${card.description}</p>
+          </div>
+        </div>`
+      );
     } else {
-      user.cards.push(p);
-      document
-        .getElementById("pull-results")
-        .insertAdjacentHTML("beforeend", `${p.name}, `);
+      user.cards.push(card);
+      document.getElementById("pull-results").insertAdjacentHTML(
+        "beforeend",
+        `<div class="card bg-base-100 w-[26%] shadow-sm">
+          <figure>
+            <img
+              src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
+              alt="${card.name} icon" />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">
+              ${card.name}
+              <div class="badge badge-secondary">${card.rarity}-star</div>
+            </h2>
+            <p>${card.description}</p>
+          </div>
+        </div>`
+      );
     }
   });
   updateCoins(user, "pull");
@@ -159,14 +200,14 @@ function startPull(user, data) {
       `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
         <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
         <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
-        <p class="text-lg" id="pull-results">Results: </p>
+        <p class="text-lg" id="pull-results-labels">Results: </p>
+        <div class="text-lg flex flex-row w-[70vw]" id="pull-results"></div>
         `
     );
     document.querySelector("#pull-btn").addEventListener("click", function () {
-      document.querySelector("#pull-results").innerHTML = "Results: ";
       if (user.coins < 10) {
         alert(
-          "you don't have enough coins. get coins from the game and come back later"
+          "you don't have enough coins. earn coins from the game and come back again"
         );
         return;
       } else {
