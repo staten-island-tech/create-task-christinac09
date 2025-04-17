@@ -56,25 +56,26 @@ function displayUserStats(user) {
       `<h2 id="coins-stat">Coins: ${user.coins}</h2> 
       <h2 id="wins-stat">Accuracy: ${user.currentScore}/${user.totalAnswered}</h2>
       <h2 id="streak-stat">Current Streak: ${user.streak}</h2>
-      <h2 id="cards-stat">Cards: </h2>`
+      <h2 id="cards-stat-label">Cards: </h2>
+      <div class="flex flex-row flex-wrap w-[90vw]" id="cards-stat"></div>`
     );
     user.cards.forEach((card) => {
       document.querySelector("#cards-stat").insertAdjacentHTML(
         "beforeend",
-        `<div class="card bg-base-100 w-96 shadow-sm">
-  <figure>
-    <img
-      src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
-      alt="${card.name} icon" />
-  </figure>
-  <div class="card-body">
-    <h2 class="card-title">
-      ${card.name}
-      <div class="badge badge-secondary">${card.rarity}-star</div>
-    </h2>
-    <p>${card.description}</p>
-  </div>
-</div>`
+        `<div class="card bg-base-100 w-[21%] shadow-sm m-4 mx-auto">
+          <figure class="m-4">
+            <img
+              src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
+              alt="${card.name} icon" />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">
+              ${card.name}
+              <div class="badge badge-secondary">${card.rarity}-star</div>
+            </h2>
+            <p>${card.description}</p>
+          </div>
+        </div>`
       );
     });
   });
@@ -126,32 +127,15 @@ function drawWithRates(allData, number) {
 
 function officialPull(user, data, amount) {
   const randomInteger = Math.floor(Math.random() * amount);
-  for (let i = 0; i < amount - randomInteger; i++) {
-    const randomCoins = updateCoins(user, "random");
-    document.getElementById("pull-results").insertAdjacentHTML(
-      "beforeend",
-      `<div class="card bg-base-100 w-[26%] shadow-sm" id="coin-result-card">
-  <figure>
-    <img
-      src="https://www.onlygfx.com/wp-content/uploads/2020/11/stack-of-gold-coins-1.png"
-      alt="coins" />
-  </figure>
-  <div class="card-body">
-    <h2 class="card-title">
-      +${randomCoins} coins
-    </h2>
-  </div>
-</div>`
-    );
-  }
+
   const pulls = drawWithRates(data, randomInteger);
   pulls.forEach((card) => {
     if (user.cards.includes(card)) {
       updateCoins(user, "duplicate");
       document.getElementById("pull-results").insertAdjacentHTML(
-        "beforeend",
-        `<div class="card bg-base-100 w-[26%] shadow-sm">
-          <figure>
+        "afterbegin",
+        `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto">
+          <figure class="m-4">
             <img
               src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
               alt="${card.name} icon" />
@@ -162,16 +146,15 @@ function officialPull(user, data, amount) {
               <div class="badge badge-secondary">${card.rarity}-star</div>
               <div class="badge badge-primary">DUPLICATE (+10 coins)</div>
             </h2>
-            <p>${card.description}</p>
           </div>
         </div>`
       );
     } else {
       user.cards.push(card);
       document.getElementById("pull-results").insertAdjacentHTML(
-        "beforeend",
-        `<div class="card bg-base-100 w-[26%] shadow-sm">
-          <figure>
+        "afterbegin",
+        `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto">
+          <figure class="m-4">
             <img
               src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
               alt="${card.name} icon" />
@@ -181,12 +164,29 @@ function officialPull(user, data, amount) {
               ${card.name}
               <div class="badge badge-secondary">${card.rarity}-star</div>
             </h2>
-            <p>${card.description}</p>
           </div>
         </div>`
       );
     }
   });
+  for (let i = 0; i < amount - randomInteger; i++) {
+    const randomCoins = updateCoins(user, "random");
+    document.getElementById("pull-results").insertAdjacentHTML(
+      "afterbegin",
+      `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto" id="coin-result-card">
+        <figure class="m-4">
+          <img
+            src="https://www.onlygfx.com/wp-content/uploads/2020/11/stack-of-gold-coins-1.png"
+            alt="coins" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            +${randomCoins} coins
+          </h2>
+        </div>
+      </div>`
+    );
+  }
   updateCoins(user, "pull");
   document.getElementById("coins-results").innerHTML = `Coins: ${user.coins}`;
   return pulls;
@@ -201,7 +201,7 @@ function startPull(user, data) {
         <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
         <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
         <p class="text-lg" id="pull-results-labels">Results: </p>
-        <div class="text-lg flex flex-row w-[70vw]" id="pull-results"></div>
+        <div class="text-lg flex flex-row flex-wrap w-[90vw]" id="pull-results"></div>
         `
     );
     document.querySelector("#pull-btn").addEventListener("click", function () {
