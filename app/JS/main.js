@@ -37,6 +37,10 @@ main();
 
 async function getAllData() {
   try {
+    // Credits to genshin.dev api
+    // API: Genshin Impact API
+    // Purpose: Fetch character data of Genshin Impact characters
+    // Docs: https://github.com/genshindev/api?tab=readme-ov-file
     const response = await fetch(`https://genshin.jmp.blue/characters/all`);
     if (response.status != 200) {
       throw new Error(response);
@@ -207,9 +211,9 @@ function officialPull(user, data, amount) {
     document.getElementById("pull-results").insertAdjacentHTML(
       "afterbegin",
       `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto" id="coin-result-card">
-        <figure class="m-6">
+        <figure class="m-6">  <!-- Coin image designed by author using Google Slides -->
           <img
-            src="https://www.onlygfx.com/wp-content/uploads/2020/11/stack-of-gold-coins-1.png"
+            src="../coin.png"  
             alt="coins" />
         </figure>
         <div class="card-body">
@@ -220,7 +224,7 @@ function officialPull(user, data, amount) {
       </div>`
     );
   }
-  updateCoins(user, "pull");
+  updateCoins(user, `pull ${amount}`);
   document.getElementById("coins-results").innerHTML = `Coins: ${user.coins}`;
   return pulls;
 }
@@ -230,29 +234,53 @@ function startPull(user, data) {
     clearContainers();
     DOMSelectors.pullContainer.insertAdjacentHTML(
       "beforeend",
-      `<h2 class="text-2xl font-bold mt-6">Click the Button Below (-10 coins)</h2>
-        <button class="btn btn-primary text-xl w-[20%]" id="pull-btn">Pull</button>
+      `<h2 class="text-2xl font-bold mt-6">Click a Button Below</h2>
+      <div class="flex flex-row w-full justify-evenly" id="pull-btn-container">
+        <div class="flex flex-col items-center">
+          <button class="btn btn-primary text-xl" id="pull-1-btn">Pull 1</button>
+          <span class="text-sm text-gray-300 mt-1">-2 Coins</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <button class="btn btn-accent text-xl" id="pull-5-btn">Pull 5</button>
+          <span class="text-sm text-gray-300 mt-1">-10 Coins</span>
+        </div>
+      </div>
         <p class="text-lg font-semibold" id="coins-results">Coins: ${user.coins}</p>
         <p class="text-lg font-semibold" id="pull-results-labels">Results: </p>
         <div class="text-lg flex flex-row flex-wrap w-[90vw] rounded-lg" id="pull-results"></div>`
     );
-    document.querySelector("#pull-btn").addEventListener("click", function () {
-      if (user.coins < 10) {
-        alert(
-          "you don't have enough coins. earn coins from the game and come back again"
-        );
-        return;
-      } else {
-        const results = officialPull(user, data, 5);
-        return results;
-      }
-    });
+    document
+      .querySelector("#pull-1-btn")
+      .addEventListener("click", function () {
+        if (user.coins < 2) {
+          alert(
+            "you don't have enough coins. earn coins from the game and come back again"
+          );
+          return;
+        } else {
+          const results = officialPull(user, data, 1);
+          return results;
+        }
+      });
+    document
+      .querySelector("#pull-5-btn")
+      .addEventListener("click", function () {
+        if (user.coins < 10) {
+          alert(
+            "you don't have enough coins. earn coins from the game and come back again"
+          );
+          return;
+        } else {
+          const results = officialPull(user, data, 5);
+          return results;
+        }
+      });
   });
 }
 
 function updateCoins(user, type) {
-  if (type === "pull") {
-    user.coins -= 10;
+  if (type.slice(0, 4) === "pull") {
+    user.coins -= type.slice(-1) * 2;
   } else if (type === "duplicate") {
     user.coins += 10;
   } else if (type === "correct") {
@@ -378,6 +406,3 @@ function shuffle(array) {
   }
   return array;
 }
-
-// Credits to genshin.dev api
-// Character data from public API: https://github.com/genshindev/api?tab=readme-ov-file
