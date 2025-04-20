@@ -15,13 +15,14 @@ function clearContainers() {
   DOMSelectors.triviaContainer.innerHTML = "";
   DOMSelectors.pullContainer.innerHTML = "";
   DOMSelectors.statsContainer.innerHTML = "";
-  DOMSelectors.triviaContainer.classList.remove("bg-base-100");
+  DOMSelectors.triviaContainer.classList.remove("bg-base-100", "my-10", "p-6");
 }
 const user = {
   currentScore: 0,
   totalAnswered: 0,
-  streak: 0,
-  coins: 10, //change back to 0 + delete comments & console.log
+  currentStreak: 0,
+  highStreak: 0,
+  coins: 0,
   cards: [],
 };
 
@@ -53,16 +54,49 @@ function displayUserStats(user) {
     clearContainers();
     DOMSelectors.statsContainer.insertAdjacentHTML(
       "beforeend",
-      `<h2 id="coins-stat">Coins: ${user.coins}</h2> 
-      <h2 id="wins-stat">Accuracy: ${user.currentScore}/${user.totalAnswered}</h2>
-      <h2 id="streak-stat">Current Streak: ${user.streak}</h2>
-      <h2 id="cards-stat-label">Cards: </h2>
-      <div class="flex flex-row flex-wrap w-[90vw]" id="cards-stat"></div>`
+      `<div class="flex flex-col lg:flex-row gap-8 bg-base-200 p-4 m-6 rounded-lg w-[100%] h-[85vh]">
+        <div class="lg:w-1/3 space-y-6">
+          <h2 class="text-3xl font-bold text-center lg:text-left">User Stats</h2>
+          <div class="space-y-4">
+            <div class="stat">
+              <div class="stat-title">Coins</div>
+              <div class="stat-value text-primary" id="coins-stat">${
+                user.coins
+              }</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Accuracy</div>
+              <div class="stat-value text-secondary" id="wins-stat">${
+                Math.round((user.currentScore / user.totalAnswered) * 100) || 0
+              }% (${user.currentScore}/${user.totalAnswered})</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Highest Streak</div>
+              <div class="stat-value text-accent" id="high-streak-stat">${
+                user.highStreak
+              }</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Current Streak</div>
+              <div class="stat-value text-accent" id="current-streak-stat">${
+                user.currentStreak
+              }</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:w-2/3 bg-base-100 p-2">
+          <h3 class="text-2xl font-semibold mb-4">Cards</h3>
+          <div class="flex flex-row flex-wrap max-h-[70vh] overflow-y-auto" id="cards-stat">
+            
+          </div>
+        </div>
+      </div>`
     );
     user.cards.forEach((card) => {
       document.querySelector("#cards-stat").insertAdjacentHTML(
         "beforeend",
-        `<div class="card bg-base-100 w-[21%] shadow-sm m-4 mx-auto">
+        `<div class="card w-[30%] shadow-sm m-4 mx-auto bg-base-200">
           <figure class="m-4">
             <img
               src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
@@ -82,7 +116,6 @@ function displayUserStats(user) {
 }
 
 function getRandomCharacters(data, number) {
-  // returns only 1 object if number is 1, returns an array of objects if number > 1
   if (number === 1) {
     const randomInteger = Math.floor(Math.random() * data.length);
     const randomCharacter = data[randomInteger];
@@ -127,25 +160,25 @@ function drawWithRates(allData, number) {
 
 function officialPull(user, data, amount) {
   const randomInteger = Math.floor(Math.random() * amount);
-
   const pulls = drawWithRates(data, randomInteger);
+  document.getElementById("pull-results").innerHTML = "";
   pulls.forEach((card) => {
     if (user.cards.includes(card)) {
       updateCoins(user, "duplicate");
       document.getElementById("pull-results").insertAdjacentHTML(
         "afterbegin",
         `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto">
-          <figure class="m-4">
+          <figure class="m-6">
             <img
               src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
               alt="${card.name} icon" />
           </figure>
           <div class="card-body">
-            <h2 class="card-title">
-              ${card.name}
-              <div class="badge badge-secondary">${card.rarity}-star</div>
-              <div class="badge badge-primary">DUPLICATE (+10 coins)</div>
-            </h2>
+            <h2 class="card-title">${card.name}</h2>
+            <div class="badge badge-secondary font-semibold">${
+              card.rarity
+            }-star</div>
+            <div class="badge badge-primary font-semibold">DUPLICATE (+10 coins)</div>
           </div>
         </div>`
       );
@@ -154,16 +187,16 @@ function officialPull(user, data, amount) {
       document.getElementById("pull-results").insertAdjacentHTML(
         "afterbegin",
         `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto">
-          <figure class="m-4">
+          <figure class="m-6">
             <img
               src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big"
               alt="${card.name} icon" />
           </figure>
           <div class="card-body">
-            <h2 class="card-title">
-              ${card.name}
-              <div class="badge badge-secondary">${card.rarity}-star</div>
-            </h2>
+            <h2 class="card-title">${card.name}</h2>
+            <div class="badge badge-secondary font-semibold">${
+              card.rarity
+            }-star</div>
           </div>
         </div>`
       );
@@ -174,7 +207,7 @@ function officialPull(user, data, amount) {
     document.getElementById("pull-results").insertAdjacentHTML(
       "afterbegin",
       `<div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto" id="coin-result-card">
-        <figure class="m-4">
+        <figure class="m-6">
           <img
             src="https://www.onlygfx.com/wp-content/uploads/2020/11/stack-of-gold-coins-1.png"
             alt="coins" />
@@ -197,12 +230,11 @@ function startPull(user, data) {
     clearContainers();
     DOMSelectors.pullContainer.insertAdjacentHTML(
       "beforeend",
-      `<h2 class="text-xl">Click the Button Below (-10 coins)</h2>
-        <button class="btn btn-primary text-xl" id="pull-btn">Pull</button>
-        <p class="text-lg" id="coins-results">Coins: ${user.coins}</p>
-        <p class="text-lg" id="pull-results-labels">Results: </p>
-        <div class="text-lg flex flex-row flex-wrap w-[90vw]" id="pull-results"></div>
-        `
+      `<h2 class="text-2xl font-bold mt-6">Click the Button Below (-10 coins)</h2>
+        <button class="btn btn-primary text-xl w-[20%]" id="pull-btn">Pull</button>
+        <p class="text-lg font-semibold" id="coins-results">Coins: ${user.coins}</p>
+        <p class="text-lg font-semibold" id="pull-results-labels">Results: </p>
+        <div class="text-lg flex flex-row flex-wrap w-[90vw] rounded-lg" id="pull-results"></div>`
     );
     document.querySelector("#pull-btn").addEventListener("click", function () {
       if (user.coins < 10) {
@@ -236,20 +268,24 @@ function updateScore(user, type) {
   if (type === "correct") {
     user.currentScore++;
     user.totalAnswered++;
-    user.streak++;
+    user.currentStreak++;
+    if (user.currentStreak > user.highStreak) {
+      user.highStreak = user.currentStreak;
+    }
     updateCoins(user, "correct");
     document.querySelector(
       "#score"
     ).innerHTML = `Score: ${user.currentScore}\nCorrect! +5 coins`;
-    document.querySelector("#streak").innerHTML = `Streak: ${user.streak}`;
   } else {
     user.totalAnswered++;
-    user.streak = 0;
+    user.currentStreak = 0;
     document.querySelector(
       "#score"
     ).innerHTML = `Score: ${user.currentScore}\nWrong!`;
-    document.querySelector("#streak").innerHTML = `Streak: ${user.streak}`;
   }
+  document.querySelector(
+    "#streak"
+  ).innerHTML = `Current Streak: ${user.currentStreak}`;
 }
 
 function startGame(user) {
@@ -290,21 +326,21 @@ function createQuestion(characterData, wrongAns, correctAns, user) {
     "beforeend",
     `<h2 class="text-2xl font-bold text-center" id="question-text">Which character is being described: ${characterData.description}"</h2>
         <h3 class="text-xl text-center" id="score">Score: ${user.currentScore}</h3>
-        <h3 class="text-xl text-center mb-4" id="streak">Streak: ${user.streak}</h3>
+        <h3 class="text-xl text-center mb-4" id="streak">Current Streak: ${user.currentStreak}</h3>
         <form id="question-form">
         <button type="submit" class="btn btn-secondary w-full py-2 rounded-md mt-4">Submit</button>
         </form>`
   );
-  DOMSelectors.triviaContainer.classList.add("bg-base-100");
+  DOMSelectors.triviaContainer.classList.add("bg-base-100", "my-10", "p-6");
   wrongAns.forEach((ans) => {
     document.getElementById("question-form").insertAdjacentHTML(
       "afterbegin",
       `<div class="form-control m-3">
-                <label class="label cursor-pointer" id="answer-choice">
-                    <span class="label-text">${ans}</span>
-                    <input type="radio" name="answer" value="${ans}" class="radio radio-secondary" />
-                </label>
-            </div>`
+        <label class="label cursor-pointer" id="answer-choice">
+            <span class="label-text">${ans}</span>
+            <input type="radio" name="answer" value="${ans}" class="radio radio-secondary" />
+        </label>
+      </div>`
     );
   });
 }
