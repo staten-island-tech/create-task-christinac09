@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="dracula" class="bg-neutral">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trivia Game</title>
+  </head>
+  <body class="bg-neutral">
+    <div class="navbar bg-base-100">
+      <div class="btn btn-ghost text-2xl font-bold flex-1">
+        <h1>Trivia Game</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-ghost text-xl" id="trivia-start-btn">Trivia</button>
+        <button class="btn btn-ghost text-xl" id="pull-start-btn">Pull</button>
+        <button class="btn text-xl" id="stats-btn">Stats</button>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-center" id="home-container">
+        <h2 class="text-3xl font-bold mt-[40vh]">Welcome to the Home Page</h2>
+        <h3 class="mb-[30vh]">Click on a button above to get started</h3>
+    </div>
+
+    <div class="flex flex-col items-center space-y-4 max-w-xl mx-auto rounded-lg" id="pull-container">
+    </div>
+
+    <div class="mx-auto rounded-lg text-center w-[90vw]" id="stats-container">
+    </div>
+
+    <div class="max-w-xl mx-auto rounded-lg" id="trivia-container">
+    </div>
+    <script type="module" src="JS/main.js"></script>
+  </body>
+</html>
