@@ -17,6 +17,7 @@ function clearContainers() {
   DOMSelectors.statsContainer.innerHTML = "";
   DOMSelectors.triviaContainer.classList.remove("bg-base-100", "my-10", "p-6");
 }
+
 const user = {
   currentScore: 0,
   totalAnswered: 0,
