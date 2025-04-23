@@ -1,4 +1,5 @@
 ideas:
+
 - can choose types of ques (MC, true/false, Sa?)
 - can choose # of ques
 - ask diff ques abt characters (guess char from info, which desc describes char)
@@ -10,5 +11,14 @@ ideas:
 - can also use coins to buy hints (eliminate ans, give extra info abt the char, etc.)
 
 algorithms to use for personalized project reference thing:
-- getrandomcharacters - has everything but selection not in loop
-- drawwithrates - has everything
+
+- getRandomItems(array, amount) - loop inside selection tho, called 3x but all run same part of function
+- getRandomPulls(allData, amount) - has everything, but called 1x
+- runPull(user, data, amount) - do parameters run diff parts of code?, called 2x
+- runTriviaRound(user, data) - if statement doesn't have else, do params run diff parts of code?; called 2x but are same
+
+some functions that could be altered
+
+- updateCoins (called 4x) and updateScore (called 2x) - add iteration
+- generateCardHTML - add iteration (loop thru cards); called 2x
+- filterByRarity - add iteration; called 2x

@@ -138,7 +138,7 @@ function displayUserStats(user) {
     user.cards.forEach((card) => {
       cardsContainer.insertAdjacentHTML(
         "beforeend",
-        generateCardHTML(card, isStat)
+        generateCardHTML(card, false, isStat)
       );
     });
   });
@@ -151,7 +151,7 @@ function getRandomItems(array, amount) {
     return randomItem;
   } else {
     const randomItems = [];
-    for (let i = 0; i < number; i++) {
+    for (let i = 0; i < amount; i++) {
       const randomInteger = Math.floor(Math.random() * data.length);
       const randomItem = data[randomInteger];
       randomItems.push(randomItem);
@@ -172,9 +172,9 @@ function filterByRarity(data, rarity) {
   return sorted;
 }
 
-function getRandomPulls(allData, number) {
+function getRandomPulls(allData, amount) {
   const pulls = [];
-  for (let i = 0; i < number; i++) {
+  for (let i = 0; i < amount; i++) {
     const randomInteger = Math.floor(Math.random() * 100);
     let sorted = [];
     if (randomInteger % 10 === 0) {
@@ -201,7 +201,7 @@ function runPull(user, data, amount) {
     }
     pullResultsContainer.insertAdjacentHTML(
       "afterbegin",
-      generateCardHTML(card, isDuplicate)
+      generateCardHTML(card, isDuplicate, false)
     );
   });
   for (let i = 0; i < amount - guaranteedCardCount; i++) {
