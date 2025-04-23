@@ -54,9 +54,11 @@ async function getAllData() {
   }
 }
 
-function generateCardHTML(card, isDuplicate = false) {
+function generateCardHTML(card, isDuplicate = false, isStat = false) {
   return `
-    <div class="card bg-base-100 w-[18%] shadow-sm m-4 mx-auto">
+    <div class="card bg-base-200 ${
+      isStat ? `w-[30%]` : `w-[18%]`
+    } shadow-sm m-4 mx-auto">
       <figure class="m-6">
         <img src="https://genshin.jmp.blue/characters/${card.id.toLowerCase()}/icon-big" alt="${
     card.name
@@ -72,6 +74,7 @@ function generateCardHTML(card, isDuplicate = false) {
             ? `<div class="badge badge-primary font-semibold">DUPLICATE (+10 coins)</div>`
             : ""
         }
+        ${isStat ? `<p class="">${card.description}</p>` : ""}
       </div>
     </div>`;
 }
@@ -130,26 +133,30 @@ function displayUserStats(user) {
       "beforeend",
       generateStatsHTML(user)
     );
+    const isStat = true;
     const cardsContainer = document.getElementById("cards-stat");
     user.cards.forEach((card) => {
-      cardsContainer.insertAdjacentHTML("beforeend", generateCardHTML(card));
+      cardsContainer.insertAdjacentHTML(
+        "beforeend",
+        generateCardHTML(card, false, isStat)
+      );
     });
   });
 }
 
-function getRandomCharacters(data, number) {
-  if (number === 1) {
-    const randomInteger = Math.floor(Math.random() * data.length);
-    const randomCharacter = data[randomInteger];
-    return randomCharacter;
+function getRandomItems(array, amount) {
+  if (amount === 1) {
+    const randomInteger = Math.floor(Math.random() * array.length);
+    const randomItem = array[randomInteger];
+    return randomItem;
   } else {
-    const characters = [];
-    for (let i = 0; i < number; i++) {
+    const randomItems = [];
+    for (let i = 0; i < amount; i++) {
       const randomInteger = Math.floor(Math.random() * data.length);
-      const randomCharacter = data[randomInteger];
-      characters.push(randomCharacter);
+      const randomItem = data[randomInteger];
+      randomItems.push(randomItem);
     }
-    return characters;
+    return randomItems;
   }
 }
 
@@ -165,17 +172,17 @@ function filterByRarity(data, rarity) {
   return sorted;
 }
 
-function getRandomPulls(allData, number) {
+function getRandomPulls(allData, amount) {
   const pulls = [];
-  for (let i = 0; i < number; i++) {
+  for (let i = 0; i < amount; i++) {
     const randomInteger = Math.floor(Math.random() * 100);
     let sorted = [];
-    if (randomInteger % 7 === 0) {
+    if (randomInteger % 10 === 0) {
       sorted = filterByRarity(allData, 5);
     } else {
       sorted = filterByRarity(allData, 4);
     }
-    pulls.push(getRandomCharacters(sorted, 1));
+    pulls.push(getRandomItems(sorted, 1));
   }
   return pulls;
 }
@@ -194,7 +201,7 @@ function runPull(user, data, amount) {
     }
     pullResultsContainer.insertAdjacentHTML(
       "afterbegin",
-      generateCardHTML(card, isDuplicate)
+      generateCardHTML(card, isDuplicate, false)
     );
   });
   for (let i = 0; i < amount - guaranteedCardCount; i++) {
@@ -305,10 +312,10 @@ function startGame(user, data) {
 async function runTriviaRound(user, data) {
   clearContainers();
   const withDescription = data.filter((char) => char.description !== "");
-  const correctCharacter = getRandomItem(withDescription);
+  const correctCharacter = getRandomItems(withDescription, 1);
   const wrongAnswers = [];
   while (wrongAnswers.length < 3) {
-    const randomName = getRandomItem(data).name;
+    const randomName = getRandomItems(data, 1).name;
     if (
       randomName !== correctCharacter.name &&
       !wrongAnswers.includes(randomName)
@@ -370,8 +377,4 @@ function shuffle(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}
-
-function getRandomItem(array) {
-  return array[Math.floor(Math.random() * array.length)];
 }
