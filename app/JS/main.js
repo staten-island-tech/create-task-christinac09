@@ -172,12 +172,12 @@ function filterByRarity(data, rarity) {
   return sorted;
 }
 
-function getRandomPulls(allData, amount) {
+function getRandomPulls(allData, amount, rate) {
   const pulls = [];
   for (let i = 0; i < amount; i++) {
     const randomInteger = Math.floor(Math.random() * 100);
     let sorted = [];
-    if (randomInteger % 10 === 0) {
+    if (randomInteger % rate === 0) {
       sorted = filterByRarity(allData, 5);
     } else {
       sorted = filterByRarity(allData, 4);
@@ -187,9 +187,25 @@ function getRandomPulls(allData, amount) {
   return pulls;
 }
 
+function applyStreakBonus(user) {
+  const rate = 0;
+  if (user.currentStreak > 10) {
+    rate = 5;
+  } else if (user.currentStreak > 5) {
+    rate = 7;
+  } else {
+    rate = 10;
+  }
+  return rate;
+}
+
 function runPull(user, data, amount) {
   const guaranteedCardCount = Math.floor(Math.random() * amount);
-  const pulledCards = getRandomPulls(data, guaranteedCardCount);
+  const pulledCards = getRandomPulls(
+    data,
+    guaranteedCardCount,
+    applyStreakBonus(user)
+  );
   const pullResultsContainer = document.getElementById("pull-results");
   pullResultsContainer.innerHTML = "";
   pulledCards.forEach((card) => {
